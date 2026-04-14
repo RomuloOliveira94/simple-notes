@@ -51,7 +51,7 @@ RSpec.describe "Notes", type: :request do
 
       expect(response).to have_http_status(:unprocessable_entity)
       json = JSON.parse(response.body)
-      expect(json["errors"]).to include("Title can't be blank")
+      expect(json["errors"]).to include("Título #{I18n.t('errors.messages.blank')}")
     end
   end
 end
