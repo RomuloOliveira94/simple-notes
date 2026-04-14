@@ -18,6 +18,7 @@
   "dependencies": {
     "@tailwindcss/cli": "^4.2.2",
     "tailwindcss": "^4.2.2",
-    "vue": "3"
+    "vue": "3",
+    "vue-i18n": "^11.2.1"
   }
 }

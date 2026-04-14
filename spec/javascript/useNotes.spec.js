@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { useNotes } from '../../app/javascript/composables/useNotes'
+import { useNotes } from '../../app/javascript/modules/notes/composables/useNotes'
+import { setLocale } from './support/i18n'
 
 global.fetch = vi.fn()
 
@@ -7,6 +8,7 @@ describe('useNotes', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     document.head.innerHTML = '<meta name="csrf-token" content="test-token">'
+    setLocale('pt-BR')
   })
 
   describe('fetchNotes', () => {
@@ -37,7 +39,7 @@ describe('useNotes', () => {
       const { error, fetchNotes } = useNotes()
       await fetchNotes()
 
-      expect(error.value).toContain('Erro ao buscar anotações')
+      expect(error.value).toContain('Erro ao buscar anotacoes')
     })
   })
 
@@ -88,7 +90,7 @@ describe('useNotes', () => {
 
       const { deleteNote } = useNotes()
 
-      await expect(deleteNote(1)).rejects.toThrow('Erro ao excluir anotação')
+      await expect(deleteNote(1)).rejects.toThrow('Erro ao excluir anotacao')
     })
   })
 })
