@@ -1,0 +1,57 @@
+require 'rails_helper'
+
+RSpec.describe "Notes", type: :request do
+  describe "GET /notes" do
+    it "returns all notes ordered by created_at desc" do
+      note1 = create(:note, title: "First", created_at: 2.days.ago)
+      note2 = create(:note, title: "Second", created_at: 1.day.ago)
+
+      get notes_path
+
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json.length).to eq(2)
+      expect(json[0]["title"]).to eq("Second")
+      expect(json[1]["title"]).to eq("First")
+    end
+
+    it "returns empty array when no notes exist" do
+      get notes_path
+
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json).to eq([])
+    end
+  end
+
+  describe "POST /notes" do
+    it "creates a note with valid params" do
+      expect {
+        post notes_path, params: { note: { title: "New note", content: "Content" } }
+      }.to change(Note, :count).by(1)
+
+      expect(response).to have_http_status(:created)
+      json = JSON.parse(response.body)
+      expect(json["title"]).to eq("New note")
+      expect(json["content"]).to eq("Content")
+    end
+
+    it "creates a note with title only" do
+      expect {
+        post notes_path, params: { note: { title: "Title only" } }
+      }.to change(Note, :count).by(1)
+
+      expect(response).to have_http_status(:created)
+    end
+
+    it "returns errors when title is missing" do
+      expect {
+        post notes_path, params: { note: { content: "No title" } }
+      }.not_to change(Note, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Title can't be blank")
+    end
+  end
+end
