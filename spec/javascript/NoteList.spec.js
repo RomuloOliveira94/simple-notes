@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import NoteList from '../../app/javascript/vue/NoteList.vue'
+import NoteList from '../../app/javascript/components/NoteList.vue'
 
 describe('NoteList', () => {
   it('renders empty message when no notes', () => {
     const wrapper = mount(NoteList, {
       props: { notes: [] }
     })
-    expect(wrapper.text()).toContain('Nenhuma anotação cadastrada')
+    expect(wrapper.text()).toContain('Nenhuma anotação ainda')
   })
 
   it('renders notes list', () => {

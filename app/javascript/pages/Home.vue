@@ -1,18 +1,33 @@
 <template>
-  <div class="max-w-2xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-8 text-gray-800">Anotações</h1>
-    <NoteForm @note-created="fetchNotes" />
-    <NoteList :notes="notes" :loading="loading" />
+  <div class="min-h-screen bg-stone-50">
+    <div class="max-w-xl mx-auto px-4 py-8 sm:py-12">
+      <header class="mb-10">
+        <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-stone-900">
+          Anotações
+        </h1>
+        <p class="mt-1 text-sm text-stone-500">
+          Suas ideias, em um só lugar.
+        </p>
+      </header>
+
+      <section class="mb-12">
+        <NoteForm @note-created="fetchNotes" />
+      </section>
+
+      <section>
+        <NoteList :notes="notes" :loading="loading" />
+      </section>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
 import { useNotes } from '../composables/useNotes'
 import NoteForm from '../components/NoteForm.vue'
 import NoteList from '../components/NoteList.vue'
 
-const { notes, loading, error, fetchNotes } = useNotes()
+const { notes, loading, fetchNotes } = useNotes()
 
 onMounted(() => {
   fetchNotes()

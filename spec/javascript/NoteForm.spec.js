@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
-import NoteForm from '../../app/javascript/vue/NoteForm.vue'
+import NoteForm from '../../app/javascript/components/NoteForm.vue'
 
 global.fetch = vi.fn()
 
