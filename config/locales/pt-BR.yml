@@ -1,5 +1,13 @@
 pt-BR:
   activerecord:
+    models:
+      note: Anotação
+    attributes:
+      note:
+        title: Título
+        content: Conteúdo
+        created_at: Criado em
+        updated_at: Atualizado em
     errors:
       messages:
         record_invalid: 'A validação falhou: %{errors}'
