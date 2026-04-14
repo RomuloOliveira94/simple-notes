@@ -1,8 +1,8 @@
 const { build } = require('esbuild')
-const { vue3Plugin } = require('esbuild-plugin-vue3')
+const vue3Plugin = require('esbuild-plugin-vue3')
 
 build({
-  entryPoints: ['app/javascript/application.js'],
+  entryPoints: ['app/javascript/application.js', 'app/javascript/vue.js'],
   bundle: true,
   sourcemap: true,
   format: 'esm',
