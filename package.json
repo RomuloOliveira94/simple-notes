@@ -12,7 +12,7 @@
   },
   "scripts": {
     "build": "node esbuild.config.js",
-    "build:css": "bunx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
+    "build:css": "npx @tailwindcss/cli -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/application.css --minify",
     "test:frontend": "vitest run"
   },
   "dependencies": {

@@ -1,7 +1,9 @@
-const { build } = require('esbuild')
+const { context } = require('esbuild')
 const vue3Plugin = require('esbuild-plugin-vue3')
 
-build({
+const isWatch = process.argv.includes('--watch')
+
+const config = {
   entryPoints: ['app/javascript/application.js', 'app/javascript/vue.js'],
   bundle: true,
   sourcemap: true,
@@ -12,4 +14,11 @@ build({
   loader: {
     '.vue': 'text'
   }
-}).catch(() => process.exit(1))
+}
+
+if (isWatch) {
+  context(config).then(ctx => ctx.watch()).catch(() => process.exit(1))
+} else {
+  const { build } = require('esbuild')
+  build(config).catch(() => process.exit(1))
+}
