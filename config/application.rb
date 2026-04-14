@@ -23,5 +23,11 @@ module SimpleNotes
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Set default locale to Brazilian Portuguese
+    config.i18n.default_locale = :"pt-BR"
+
+    # Set timezone to Brasilia (Brazil)
+    config.time_zone = "America/Sao_Paulo"
   end
 end
