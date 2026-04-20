@@ -1,9 +1,11 @@
 <template>
   <div class="container mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-16">
     <header class="mb-12 text-center sm:text-left">
-      <h1 class="text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl">
-        {{ t("app.title") }}
-      </h1>
+      <img
+        src="/simple-notes.png"
+        :alt="t('app.title')"
+        class="mx-auto h-12 w-auto sm:mx-0"
+      />
     </header>
 
     <section

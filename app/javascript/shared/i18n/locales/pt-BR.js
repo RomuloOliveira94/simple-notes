@@ -1,29 +1,29 @@
 export default {
   app: {
-    title: 'Anotacoes',
+    title: 'Anotações',
   },
   noteForm: {
-    sectionTitle: 'Nova anotacao',
-    titleLabel: 'Titulo',
-    titlePlaceholder: 'De um nome a anotacao',
-    contentLabel: 'Conteudo',
+    sectionTitle: 'Nova anotação',
+    titleLabel: 'Título',
+    titlePlaceholder: 'Dê um nome à anotação',
+    contentLabel: 'Conteúdo',
     contentPlaceholder: 'Escreva algo...',
     submit: 'Salvar',
     submitting: 'Salvando...'
   },
   noteList: {
-    countOne: '{count} anotacao',
-    countOther: '{count} anotacoes',
-    empty: 'Nenhuma anotacao ainda.',
-    deleteAriaLabel: 'Excluir anotacao',
-    deleteConfirm: 'Tem certeza que deseja excluir a anotacao "{title}"?'
+    countOne: '{count} anotação',
+    countOther: '{count} anotações',
+    empty: 'Nenhuma anotação ainda.',
+    deleteAriaLabel: 'Excluir anotação',
+    deleteConfirm: 'Tem certeza que deseja excluir a anotação "{title}"?'
   },
   errors: {
-    saveNote: 'Erro ao salvar anotacao',
+    saveNote: 'Erro ao salvar anotação',
     fetchNotes: 'Erro ao buscar anotacoes: {status}',
-    createNote: 'Erro ao criar anotacao',
-    updateNote: 'Erro ao atualizar anotacao',
-    deleteNote: 'Erro ao excluir anotacao',
+    createNote: 'Erro ao criar anotação',
+    updateNote: 'Erro ao atualizar anotação',
+    deleteNote: 'Erro ao excluir anotação',
     requestTimeout: 'A requisicao demorou demais. Tente novamente.'
   }
 }

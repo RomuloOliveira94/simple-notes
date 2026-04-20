@@ -24,7 +24,7 @@ describe('NoteList', () => {
     expect(wrapper.findAll('li')).toHaveLength(2)
     expect(wrapper.text()).toContain('Note 1')
     expect(wrapper.text()).toContain('Note 2')
-    expect(wrapper.text()).toContain('2 anotacoes')
+    expect(wrapper.text()).toContain('2 anotações')
   })
 
   it('renders note without content', () => {
