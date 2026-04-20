@@ -1,5 +1,6 @@
 const { context } = require('esbuild')
 const vue3Plugin = require('esbuild-plugin-vue3')
+const path = require('path')
 
 const isWatch = process.argv.includes('--watch')
 
@@ -11,6 +12,12 @@ const config = {
   outdir: 'app/assets/builds',
   publicPath: '/assets',
   plugins: [vue3Plugin()],
+  alias: {
+    '@': path.resolve(__dirname, 'app/javascript'),
+    '@app': path.resolve(__dirname, 'app/javascript/app'),
+    '@shared': path.resolve(__dirname, 'app/javascript/shared'),
+    '@modules': path.resolve(__dirname, 'app/javascript/modules')
+  },
   loader: {
     '.vue': 'text'
   }

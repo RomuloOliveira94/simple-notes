@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["app/javascript/*"],
+      "@modules/*": ["app/javascript/modules/*"],
+      "@shared/*": ["app/javascript/shared/*"],
+      "@app/*": ["app/javascript/app/*"]
+    }
+  },
+  "include": ["app/javascript/**/*.js", "app/javascript/**/*.vue", "spec/javascript/**/*.js"]
+}
