@@ -21,6 +21,7 @@ Aplicacao de anotacoes full-stack com Rails 8 + Vue 3, API JSON e deploy automat
 - [Scripts de Desenvolvimento](#scripts-de-desenvolvimento)
 - [Documentacao da API](#documentacao-da-api)
 - [Testes e Qualidade](#testes-e-qualidade)
+- [Como Contribuir](#como-contribuir)
 - [CI/CD](#cicd)
 - [Build de Producao com Docker](#build-de-producao-com-docker)
 - [Banco de Dados](#banco-de-dados)
@@ -170,6 +171,41 @@ Etapas da pipeline local:
 - RSpec
 - Vitest
 - seed/replant em ambiente de teste
+
+## Como Contribuir
+
+### 1) Crie uma branch
+
+```bash
+git checkout -b feat/minha-mudanca
+```
+
+### 2) Rode os checks locais
+
+```bash
+bin/ci
+```
+
+### 3) Faça commits claros
+
+Padrao sugerido:
+
+- `feat: ...`
+- `fix: ...`
+- `docs: ...`
+- `chore: ...`
+- `test: ...`
+
+### 4) Abra um Pull Request
+
+- descreva o contexto da mudanca
+- liste o que foi alterado
+- inclua evidencias (logs, prints ou resultados de testes)
+
+### 5) Merge e deploy
+
+- apos merge na `main`, o CI roda automaticamente
+- o CD pode exigir aprovacao manual no environment `production`
 
 ## CI/CD
 
