@@ -1,0 +1,26 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    working_dir: /rails
+    command: bash -lc "bundle check || bundle install && bun install -y --frozen-lockfile && (gem list -i foreman > /dev/null || gem install foreman) && bin/rails db:prepare && bin/dev"
+    ports:
+      - "3000:3000"
+    environment:
+      RAILS_ENV: development
+      PORT: 3000
+    volumes:
+      - .:/rails
+      - bundle:/usr/local/bundle
+      - node_modules:/rails/node_modules
+      - storage:/rails/storage
+      - tmp:/rails/tmp
+    stdin_open: true
+    tty: true
+
+volumes:
+  bundle:
+  node_modules:
+  storage:
+  tmp:
