@@ -6,7 +6,10 @@
       {{ countLabel }}
     </h2>
 
-    <div v-if="loading" class="flex items-center justify-center py-12">
+    <div
+      v-if="loading && notes.length === 0"
+      class="flex items-center justify-center py-12"
+    >
       <div
         class="h-5 w-5 animate-spin rounded-full border-2 border-stone-300 border-t-stone-900"
       />
@@ -16,7 +19,7 @@
       <p class="text-sm text-stone-400">{{ t("noteList.empty") }}</p>
     </div>
 
-    <ul v-else class="space-y-3">
+    <ul v-if="notes.length > 0" class="space-y-3">
       <li
         v-for="note in notes"
         :key="note.id"
@@ -44,6 +47,14 @@
         </time>
       </li>
     </ul>
+
+    <div v-if="loadingMore" class="py-5 text-center">
+      <p class="text-xs text-stone-400">{{ t("noteList.loadingMore") }}</p>
+    </div>
+
+    <div v-else-if="!hasMore && notes.length > 0" class="py-5 text-center">
+      <p class="text-xs text-stone-400">{{ t("noteList.endOfList") }}</p>
+    </div>
   </div>
 </template>
 
@@ -67,6 +78,14 @@
     deletingId: {
       type: Number,
       default: null,
+    },
+    loadingMore: {
+      type: Boolean,
+      default: false,
+    },
+    hasMore: {
+      type: Boolean,
+      default: true,
     },
   });
 

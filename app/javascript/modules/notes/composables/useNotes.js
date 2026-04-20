@@ -26,26 +26,63 @@ function normalizeError(err, fallback) {
 export function useNotes() {
   const notes = ref([])
   const loading = ref(false)
+  const loadingMore = ref(false)
   const error = ref(null)
+  const pagination = ref({
+    page: 1,
+    next: null,
+    limit: 10,
+    hasMore: true
+  })
 
-  async function fetchNotes() {
-    loading.value = true
+  async function fetchNotes({ page = 1, append = false } = {}) {
+    if (append) {
+      loadingMore.value = true
+    } else {
+      loading.value = true
+    }
+
     error.value = null
 
     try {
-      const response = await fetchNotesRequest()
+      const response = await fetchNotesRequest({
+        page,
+        limit: pagination.value.limit
+      })
 
       if (!response.ok) {
         throw new Error(translate('errors.fetchNotes', { status: response.status }))
       }
 
-      notes.value = await response.json()
+      const payload = await response.json()
+      const records = Array.isArray(payload?.data) ? payload.data : []
+      const pagyData = payload?.pagy || {}
+
+      notes.value = append ? [...notes.value, ...records] : records
+      pagination.value = {
+        page: pagyData.page || page,
+        next: pagyData.next ?? null,
+        limit: pagyData.limit || pagination.value.limit,
+        hasMore: Boolean(pagyData.next)
+      }
     } catch (err) {
       error.value = normalizeError(err, translate('errors.fetchNotes'))
       console.error(err)
     } finally {
-      loading.value = false
+      if (append) {
+        loadingMore.value = false
+      } else {
+        loading.value = false
+      }
     }
+  }
+
+  async function fetchNextPage() {
+    if (!pagination.value.hasMore || loadingMore.value || loading.value) {
+      return
+    }
+
+    await fetchNotes({ page: pagination.value.next, append: true })
   }
 
   async function createNote(noteData) {
@@ -113,8 +150,11 @@ export function useNotes() {
   return {
     notes,
     loading,
+    loadingMore,
     error,
+    pagination,
     fetchNotes,
+    fetchNextPage,
     createNote,
     updateNote,
     deleteNote

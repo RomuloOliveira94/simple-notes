@@ -1,7 +1,16 @@
 class NotesController < ApplicationController
   def index
-    @notes = Note.order(created_at: :desc)
-    render json: @notes
+    set = Note.order(created_at: :desc, id: :desc)
+    pagy, notes = pagy(:countless, set, limit: 10, max_limit: 50)
+
+    render json: {
+      data: notes,
+      pagy: {
+        page: pagy.page,
+        next: pagy.next,
+        limit: pagy.limit
+      }
+    }
   end
 
   def create

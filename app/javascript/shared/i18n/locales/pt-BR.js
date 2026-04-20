@@ -15,6 +15,8 @@ export default {
     countOne: '{count} anotação',
     countOther: '{count} anotações',
     empty: 'Nenhuma anotação ainda.',
+    loadingMore: 'Carregando mais anotações...',
+    endOfList: 'Você chegou ao fim da lista.',
     deleteAriaLabel: 'Excluir anotação',
     deleteConfirm: 'Tem certeza que deseja excluir a anotação "{title}"?'
   },

@@ -23,15 +23,19 @@
       <NoteList
         :notes="notes"
         :loading="loading"
+        :loading-more="loadingMore"
+        :has-more="pagination.hasMore"
         :deleting-id="deletingId"
         @delete-note="handleDeleteNote"
       />
+
+      <div ref="infiniteScrollAnchor" class="h-1" aria-hidden="true" />
     </section>
   </div>
 </template>
 
 <script setup>
-  import { onMounted, ref } from "vue";
+  import { onBeforeUnmount, onMounted, ref } from "vue";
   import { useI18n } from "vue-i18n";
   import NoteForm from "../components/NoteForm.vue";
   import NoteList from "../components/NoteList.vue";
@@ -40,12 +44,52 @@
   defineOptions({ name: "HomePage" });
 
   const { t } = useI18n();
-  const { notes, loading, fetchNotes, deleteNote } = useNotes();
+  const {
+    notes,
+    loading,
+    loadingMore,
+    pagination,
+    fetchNotes,
+    fetchNextPage,
+    deleteNote,
+  } = useNotes();
   const deletingId = ref(null);
+  const infiniteScrollAnchor = ref(null);
+  const observer = ref(null);
 
-  onMounted(() => {
-    fetchNotes();
+  onMounted(async () => {
+    await fetchNotes();
+    setupInfiniteScroll();
   });
+
+  onBeforeUnmount(() => {
+    observer.value?.disconnect();
+  });
+
+  function setupInfiniteScroll() {
+    if (!window.IntersectionObserver || !infiniteScrollAnchor.value) {
+      return;
+    }
+
+    observer.value = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+
+        if (!entry?.isIntersecting) {
+          return;
+        }
+
+        fetchNextPage();
+      },
+      {
+        root: null,
+        threshold: 0,
+        rootMargin: "200px 0px",
+      },
+    );
+
+    observer.value.observe(infiniteScrollAnchor.value);
+  }
 
   async function handleDeleteNote(note) {
     const confirmed = window.confirm(
@@ -60,7 +104,7 @@
 
     try {
       await deleteNote(note.id);
-      await fetchNotes();
+      await fetchNotes({ page: 1, append: false });
     } finally {
       deletingId.value = null;
     }
