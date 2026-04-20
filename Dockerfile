@@ -24,7 +24,7 @@ RUN apt-get update -qq && \
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development" \
+    BUNDLE_WITHOUT="development:test" \
     LD_PRELOAD="/usr/local/lib/libjemalloc.so"
 
 # Throw-away build stage to reduce size of final image
@@ -37,15 +37,14 @@ RUN apt-get update -qq && \
 
 # Install JavaScript dependencies
 ARG NODE_VERSION=24.14.0
-ARG YARN_VERSION=1.22.22
 ENV PATH=/usr/local/node/bin:$PATH
 RUN curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
     /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
-    npm install -g yarn@$YARN_VERSION && \
+    npm install -g bun && \
     rm -rf /tmp/node-build-master
 
 # Install application gems
-COPY vendor/* ./vendor/
+COPY vendor ./vendor
 COPY Gemfile Gemfile.lock ./
 
 RUN bundle install && \
@@ -54,8 +53,8 @@ RUN bundle install && \
     bundle exec bootsnap precompile -j 1 --gemfile
 
 # Install node modules
-COPY package.json yarn.lock ./
-RUN yarn install --immutable
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
 
 # Copy application code
 COPY . .
