@@ -1,38 +1,19 @@
-function csrfToken() {
-  const meta = document.querySelector('meta[name="csrf-token"]')
-  return meta ? meta.content : ''
-}
+import { createHttpClient } from '@shared/api/httpClient'
 
-function jsonHeaders() {
-  return {
-    'Content-Type': 'application/json',
-    'X-CSRF-Token': csrfToken()
-  }
-}
+const http = createHttpClient()
 
 export async function fetchNotesRequest() {
-  return fetch('/notes')
+  return http.get('/notes')
 }
 
 export async function createNoteRequest(noteData) {
-  return fetch('/notes', {
-    method: 'POST',
-    headers: jsonHeaders(),
-    body: JSON.stringify({ note: noteData })
-  })
+  return http.post('/notes', { note: noteData })
 }
 
 export async function updateNoteRequest(id, noteData) {
-  return fetch(`/notes/${id}`, {
-    method: 'PATCH',
-    headers: jsonHeaders(),
-    body: JSON.stringify({ note: noteData })
-  })
+  return http.patch(`/notes/${id}`, { note: noteData })
 }
 
 export async function deleteNoteRequest(id) {
-  return fetch(`/notes/${id}`, {
-    method: 'DELETE',
-    headers: jsonHeaders()
-  })
+  return http.delete(`/notes/${id}`)
 }
