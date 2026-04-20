@@ -14,7 +14,9 @@ export default {
   noteList: {
     countOne: '{count} anotacao',
     countOther: '{count} anotacoes',
-    empty: 'Nenhuma anotacao ainda.'
+    empty: 'Nenhuma anotacao ainda.',
+    deleteAriaLabel: 'Excluir anotacao',
+    deleteConfirm: 'Tem certeza que deseja excluir a anotacao "{title}"?'
   },
   errors: {
     saveNote: 'Erro ao salvar anotacao',

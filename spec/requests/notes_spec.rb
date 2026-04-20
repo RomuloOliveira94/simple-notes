@@ -54,4 +54,24 @@ RSpec.describe "Notes", type: :request do
       expect(json["errors"]).to include("Título #{I18n.t('errors.messages.blank')}")
     end
   end
+
+  describe "DELETE /notes/:id" do
+    it "deletes an existing note" do
+      note = create(:note)
+
+      expect {
+        delete note_path(note)
+      }.to change(Note, :count).by(-1)
+
+      expect(response).to have_http_status(:no_content)
+    end
+
+    it "returns not found when note does not exist" do
+      delete note_path(id: 999_999)
+
+      expect(response).to have_http_status(:not_found)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Nota nao encontrada")
+    end
+  end
 end

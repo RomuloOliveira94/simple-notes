@@ -36,4 +36,27 @@ describe('NoteList', () => {
     expect(wrapper.text()).toContain('Title only')
     expect(wrapper.find('p').exists()).toBe(false)
   })
+
+  it('emits delete-note when delete button is clicked', async () => {
+    const notes = [{ id: 1, title: 'Note 1', content: 'Content 1' }]
+    const wrapper = mount(NoteList, {
+      props: { notes },
+      global: mountWithI18n()
+    })
+
+    await wrapper.find('button[aria-label="Excluir anotacao"]').trigger('click')
+
+    expect(wrapper.emitted('delete-note')).toBeTruthy()
+    expect(wrapper.emitted('delete-note')[0]).toEqual([notes[0]])
+  })
+
+  it('disables delete button for note being deleted', () => {
+    const notes = [{ id: 1, title: 'Note 1', content: 'Content 1' }]
+    const wrapper = mount(NoteList, {
+      props: { notes, deletingId: 1 },
+      global: mountWithI18n()
+    })
+
+    expect(wrapper.find('button[aria-label="Excluir anotacao"]').attributes('disabled')).toBeDefined()
+  })
 })
