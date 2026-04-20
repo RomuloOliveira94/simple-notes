@@ -95,7 +95,7 @@ describe('useNotes', () => {
 
       const { deleteNote } = useNotes()
 
-      await expect(deleteNote(1)).rejects.toThrow('Erro ao excluir anotacao')
+      await expect(deleteNote(1)).rejects.toThrow('Erro ao excluir anotação')
     })
   })
 })

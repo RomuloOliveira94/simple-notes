@@ -9,7 +9,7 @@ describe('NoteList', () => {
       props: { notes: [] },
       global: mountWithI18n()
     })
-    expect(wrapper.text()).toContain('Nenhuma anotacao ainda')
+    expect(wrapper.text()).toContain('Nenhuma anotação ainda')
   })
 
   it('renders notes list', () => {
@@ -44,7 +44,7 @@ describe('NoteList', () => {
       global: mountWithI18n()
     })
 
-    await wrapper.find('button[aria-label="Excluir anotacao"]').trigger('click')
+    await wrapper.find('button[aria-label="Excluir anotação"]').trigger('click')
 
     expect(wrapper.emitted('delete-note')).toBeTruthy()
     expect(wrapper.emitted('delete-note')[0]).toEqual([notes[0]])
@@ -57,6 +57,6 @@ describe('NoteList', () => {
       global: mountWithI18n()
     })
 
-    expect(wrapper.find('button[aria-label="Excluir anotacao"]').attributes('disabled')).toBeDefined()
+    expect(wrapper.find('button[aria-label="Excluir anotação"]').attributes('disabled')).toBeDefined()
   })
 })
