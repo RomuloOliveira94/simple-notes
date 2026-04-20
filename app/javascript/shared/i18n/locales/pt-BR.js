@@ -1,12 +1,6 @@
 export default {
   app: {
     title: 'Anotacoes',
-    subtitle: 'Suas ideias, em um so lugar.',
-    localeLabel: 'Idioma',
-    locale: {
-      'pt-BR': 'Portugues (Brasil)',
-      en: 'English'
-    }
   },
   noteForm: {
     sectionTitle: 'Nova anotacao',

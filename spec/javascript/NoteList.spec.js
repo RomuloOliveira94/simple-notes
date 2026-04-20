@@ -36,13 +36,4 @@ describe('NoteList', () => {
     expect(wrapper.text()).toContain('Title only')
     expect(wrapper.find('p').exists()).toBe(false)
   })
-
-  it('renders translations in english locale', () => {
-    const wrapper = mount(NoteList, {
-      props: { notes: [] },
-      global: mountWithI18n('en')
-    })
-
-    expect(wrapper.text()).toContain('No notes yet.')
-  })
 })

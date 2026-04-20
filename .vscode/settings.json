@@ -1,0 +1,7 @@
+{
+  "i18n-ally.localesPaths": [
+    "config/locales",
+    "app/javascript/shared/i18n",
+    "app/javascript/shared/i18n/locales"
+  ]
+}
