@@ -95,7 +95,7 @@ RSpec.describe "Notes", type: :request do
 
       expect(response).to have_http_status(:not_found)
       json = JSON.parse(response.body)
-      expect(json["errors"]).to include("Nota nao encontrada")
+      expect(json["errors"]).to include("Nota não encontrada")
     end
   end
 end
