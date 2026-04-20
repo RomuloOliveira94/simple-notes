@@ -243,6 +243,27 @@ Segredos necessarios:
 - `CAPROVER_APP_NAME`
 - `CAPROVER_APP_TOKEN`
 
+### Release Automatizado (GitHub Releases)
+
+O projeto tambem possui um workflow de release automatizado em [.github/workflows/release.yml](.github/workflows/release.yml).
+
+Gatilho:
+
+- push de tags no padrao `v*.*.*`
+
+Exemplo:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Fluxo:
+
+1. o GitHub Actions detecta a nova tag
+2. o workflow cria uma GitHub Release automaticamente
+3. as release notes sao geradas automaticamente pelo GitHub
+
 ## Build de Producao com Docker
 
 Build da imagem:
