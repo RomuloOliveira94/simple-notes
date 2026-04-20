@@ -8,7 +8,8 @@ export default {
     titlePlaceholder: 'De um nome a anotacao',
     contentLabel: 'Conteudo',
     contentPlaceholder: 'Escreva algo...',
-    submit: 'Salvar'
+    submit: 'Salvar',
+    submitting: 'Salvando...'
   },
   noteList: {
     countOne: '{count} anotacao',
@@ -20,6 +21,7 @@ export default {
     fetchNotes: 'Erro ao buscar anotacoes: {status}',
     createNote: 'Erro ao criar anotacao',
     updateNote: 'Erro ao atualizar anotacao',
-    deleteNote: 'Erro ao excluir anotacao'
+    deleteNote: 'Erro ao excluir anotacao',
+    requestTimeout: 'A requisicao demorou demais. Tente novamente.'
   }
 }

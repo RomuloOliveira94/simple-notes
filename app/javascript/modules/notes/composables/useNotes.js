@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { translate } from '../../../app/plugins/i18n'
+import { translate } from '@app/plugins/i18n'
 import {
   fetchNotesRequest,
   createNoteRequest,
@@ -10,6 +10,14 @@ import {
 function normalizeError(err, fallback) {
   if (Array.isArray(err)) {
     return err
+  }
+
+  if (typeof err === 'string' && err.trim().length > 0) {
+    return [err]
+  }
+
+  if (err?.name === 'AbortError') {
+    return [translate('errors.requestTimeout')]
   }
 
   return [err?.message || fallback]
@@ -33,7 +41,7 @@ export function useNotes() {
 
       notes.value = await response.json()
     } catch (err) {
-      error.value = err.message
+      error.value = normalizeError(err, translate('errors.fetchNotes'))
       console.error(err)
     } finally {
       loading.value = false
@@ -95,7 +103,7 @@ export function useNotes() {
 
       return true
     } catch (err) {
-      error.value = err.message
+      error.value = normalizeError(err, translate('errors.deleteNote'))
       throw err
     } finally {
       loading.value = false

@@ -1,5 +1,5 @@
-import { reactive } from 'vue'
-import { translate } from '../../../app/plugins/i18n'
+import { reactive, ref } from 'vue'
+import { translate } from '@app/plugins/i18n'
 import { createNoteRequest } from '../api/notesApi'
 
 export function useNoteForm() {
@@ -9,6 +9,7 @@ export function useNoteForm() {
   })
 
   const errors = reactive({})
+  const isSubmitting = ref(false)
 
   function resetErrors() {
     Object.keys(errors).forEach((key) => {
@@ -31,7 +32,12 @@ export function useNoteForm() {
   }
 
   async function submit() {
+    if (isSubmitting.value) {
+      return false
+    }
+
     resetErrors()
+    isSubmitting.value = true
 
     try {
       const response = await createNoteRequest(form)
@@ -48,12 +54,15 @@ export function useNoteForm() {
     } catch (err) {
       errors.general = translate('errors.saveNote')
       return false
+    } finally {
+      isSubmitting.value = false
     }
   }
 
   return {
     form,
     errors,
+    isSubmitting,
     submit
   }
 }
