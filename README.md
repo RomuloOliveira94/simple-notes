@@ -1,24 +1,34 @@
-# README
+# Simple Notes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Run with Docker Compose (development)
 
-Things you may want to cover:
+Start everything needed for local development:
 
-* Ruby version
+```bash
+docker compose up --build
+```
 
-* System dependencies
+Application URL:
 
-* Configuration
+```text
+http://localhost:3000
+```
 
-* Database creation
+Useful commands:
 
-* Database initialization
+```bash
+# Stop containers
+docker compose down
 
-* How to run the test suite
+# Stop and remove named volumes (bundle, node_modules, storage, tmp)
+docker compose down -v
 
-* Services (job queues, cache servers, search engines, etc.)
+# Open a shell in the app container
+docker compose exec app bash
 
-* Deployment instructions
+# Run frontend tests
+docker compose exec app bun run test:frontend
 
-* ...
+# Run request specs
+docker compose exec app bundle exec rspec spec/requests/notes_spec.rb
+```
