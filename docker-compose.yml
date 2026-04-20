@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     working_dir: /rails
-    command: bash -lc "bundle check || bundle install && bun install -y --frozen-lockfile && (gem list -i foreman > /dev/null || gem install foreman) && bin/rails db:prepare && bin/dev"
+    command: bash -lc "bundle check || bundle install && bun install -y --frozen-lockfile && (gem list -i foreman > /dev/null || gem install foreman) && rm -f tmp/pids/server.pid && bin/rails db:prepare && bin/dev"
     ports:
       - "3000:3000"
     environment:
