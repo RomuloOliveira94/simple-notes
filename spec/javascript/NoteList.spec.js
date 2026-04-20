@@ -59,4 +59,24 @@ describe('NoteList', () => {
 
     expect(wrapper.find('button[aria-label="Excluir anotação"]').attributes('disabled')).toBeDefined()
   })
+
+  it('shows loading more message', () => {
+    const notes = [{ id: 1, title: 'Note 1', content: 'Content 1' }]
+    const wrapper = mount(NoteList, {
+      props: { notes, loadingMore: true },
+      global: mountWithI18n()
+    })
+
+    expect(wrapper.text()).toContain('Carregando mais anotações...')
+  })
+
+  it('shows end of list message when no more pages', () => {
+    const notes = [{ id: 1, title: 'Note 1', content: 'Content 1' }]
+    const wrapper = mount(NoteList, {
+      props: { notes, hasMore: false },
+      global: mountWithI18n()
+    })
+
+    expect(wrapper.text()).toContain('Você chegou ao fim da lista.')
+  })
 })

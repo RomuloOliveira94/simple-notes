@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Notes", type: :request do
   describe "GET /notes" do
-    it "returns all notes ordered by created_at desc" do
+    it "returns paginated notes ordered by created_at desc" do
       note1 = create(:note, title: "First", created_at: 2.days.ago)
       note2 = create(:note, title: "Second", created_at: 1.day.ago)
 
@@ -10,9 +10,12 @@ RSpec.describe "Notes", type: :request do
 
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
-      expect(json.length).to eq(2)
-      expect(json[0]["title"]).to eq("Second")
-      expect(json[1]["title"]).to eq("First")
+      expect(json["data"].length).to eq(2)
+      expect(json["data"][0]["title"]).to eq("Second")
+      expect(json["data"][1]["title"]).to eq("First")
+      expect(json["pagy"]["page"]).to eq(1)
+      expect(json["pagy"]["next"]).to be_nil
+      expect(json["pagy"]["limit"]).to eq(10)
     end
 
     it "returns empty array when no notes exist" do
@@ -20,7 +23,28 @@ RSpec.describe "Notes", type: :request do
 
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
-      expect(json).to eq([])
+      expect(json["data"]).to eq([])
+      expect(json["pagy"]["next"]).to be_nil
+    end
+
+    it "returns next page metadata when more notes are available" do
+      create_list(:note, 11)
+
+      get notes_path
+
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json["data"].length).to eq(10)
+      expect(json["pagy"]["page"]).to eq(1)
+      expect(json["pagy"]["next"]).to eq(2)
+
+      get notes_path, params: { page: 2 }
+
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json["data"].length).to eq(1)
+      expect(json["pagy"]["page"]).to eq(2)
+      expect(json["pagy"]["next"]).to be_nil
     end
   end
 

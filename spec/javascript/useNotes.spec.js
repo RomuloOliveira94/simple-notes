@@ -23,16 +23,51 @@ describe('useNotes', () => {
       ]
       global.fetch.mockResolvedValueOnce({
         ok: true,
-        json: async () => notesData
+        json: async () => ({
+          data: notesData,
+          pagy: { page: 1, next: null, limit: 10 }
+        })
       })
 
-      const { notes, loading, fetchNotes } = useNotes()
+      const { notes, loading, pagination, fetchNotes } = useNotes()
 
       expect(loading.value).toBe(false)
       await fetchNotes()
 
       expect(notes.value).toEqual(notesData)
+      expect(pagination.value.hasMore).toBe(false)
       expect(loading.value).toBe(false)
+    })
+
+    it('appends notes when fetching next page', async () => {
+      global.fetch
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            data: [{ id: 1, title: 'Note 1', content: 'Content 1' }],
+            pagy: { page: 1, next: 2, limit: 10 }
+          })
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({
+            data: [{ id: 2, title: 'Note 2', content: 'Content 2' }],
+            pagy: { page: 2, next: null, limit: 10 }
+          })
+        })
+
+      const { notes, fetchNotes, fetchNextPage, pagination } = useNotes()
+
+      await fetchNotes()
+      await fetchNextPage()
+
+      expect(notes.value).toEqual([
+        { id: 1, title: 'Note 1', content: 'Content 1' },
+        { id: 2, title: 'Note 2', content: 'Content 2' }
+      ])
+      expect(pagination.value.hasMore).toBe(false)
+      expect(global.fetch).toHaveBeenNthCalledWith(1, '/notes?page=1&limit=10', expect.objectContaining({ method: 'GET' }))
+      expect(global.fetch).toHaveBeenNthCalledWith(2, '/notes?page=2&limit=10', expect.objectContaining({ method: 'GET' }))
     })
 
     it('sets error on fetch failure', async () => {
