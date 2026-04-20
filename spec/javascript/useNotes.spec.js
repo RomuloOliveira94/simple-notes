@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { useNotes } from '../../app/javascript/modules/notes/composables/useNotes'
 import { setLocale } from './support/i18n'
 
@@ -7,8 +7,13 @@ global.fetch = vi.fn()
 describe('useNotes', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.spyOn(console, 'error').mockImplementation(() => {})
     document.head.innerHTML = '<meta name="csrf-token" content="test-token">'
     setLocale('pt-BR')
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   describe('fetchNotes', () => {
@@ -39,7 +44,7 @@ describe('useNotes', () => {
       const { error, fetchNotes } = useNotes()
       await fetchNotes()
 
-      expect(error.value).toContain('Erro ao buscar anotacoes')
+      expect(error.value).toEqual([expect.stringContaining('Erro ao buscar anotacoes')])
     })
   })
 

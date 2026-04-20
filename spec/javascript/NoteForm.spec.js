@@ -48,4 +48,30 @@ describe('NoteForm', () => {
 
     expect(wrapper.text()).toContain('Title can\'t be blank')
   })
+
+  it('disables submit button while request is in progress', async () => {
+    let resolveRequest
+    const pendingRequest = new Promise((resolve) => {
+      resolveRequest = resolve
+    })
+
+    global.fetch.mockReturnValueOnce(pendingRequest)
+    const wrapper = mount(NoteForm, {
+      global: mountWithI18n()
+    })
+
+    await wrapper.find('input').setValue('Test title')
+    await wrapper.find('textarea').setValue('Test content')
+    await wrapper.find('form').trigger('submit.prevent')
+
+    const submitButton = wrapper.find('button[type="submit"]')
+    expect(submitButton.attributes('disabled')).toBeDefined()
+    expect(submitButton.text()).toBe('Salvando...')
+
+    resolveRequest({ ok: true })
+    await flushPromises()
+
+    expect(submitButton.attributes('disabled')).toBeUndefined()
+    expect(submitButton.text()).toBe('Salvar')
+  })
 })
