@@ -68,6 +68,17 @@ RSpec.describe "Notes", type: :request do
       expect(response).to have_http_status(:created)
     end
 
+    it "preserves whitespace in content when creating a note" do
+      content_with_spaces = "Primeira linha\n  Segunda   linha com   espaços  "
+
+      post notes_path, params: { note: { title: "Com espaços", content: content_with_spaces } }
+
+      expect(response).to have_http_status(:created)
+      json = JSON.parse(response.body)
+      expect(json["content"]).to eq(content_with_spaces)
+      expect(Note.last.content).to eq(content_with_spaces)
+    end
+
     it "returns errors when title is missing" do
       expect {
         post notes_path, params: { note: { content: "No title" } }
@@ -76,6 +87,26 @@ RSpec.describe "Notes", type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
       json = JSON.parse(response.body)
       expect(json["errors"]).to include("Título #{I18n.t('errors.messages.blank')}")
+    end
+
+    it "returns errors when title exceeds max length" do
+      expect {
+        post notes_path, params: { note: { title: "a" * (Note::TITLE_MAX_LENGTH + 1), content: "Content" } }
+      }.not_to change(Note, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Título #{I18n.t('errors.messages.too_long', count: Note::TITLE_MAX_LENGTH)}")
+    end
+
+    it "returns errors when content exceeds max length" do
+      expect {
+        post notes_path, params: { note: { title: "Long content", content: "a" * (Note::CONTENT_MAX_LENGTH + 1) } }
+      }.not_to change(Note, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Conteúdo #{I18n.t('errors.messages.too_long', count: Note::CONTENT_MAX_LENGTH)}")
     end
   end
 

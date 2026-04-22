@@ -11,6 +11,7 @@
         id="title"
         v-model="form.title"
         type="text"
+        :maxlength="NOTE_TITLE_MAX_LENGTH"
         :placeholder="t('noteForm.titlePlaceholder')"
         :class="[
           'w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm outline-none transition-colors',
@@ -36,10 +37,11 @@
       <textarea
         id="content"
         v-model="form.content"
-        rows="3"
+        rows="8"
+        :maxlength="NOTE_CONTENT_MAX_LENGTH"
         :placeholder="t('noteForm.contentPlaceholder')"
         :class="[
-          'w-full resize-none rounded-lg border bg-white px-3.5 py-2.5 text-sm outline-none transition-colors',
+          'w-full min-h-40 resize-y rounded-lg border bg-white px-3.5 py-2.5 text-sm outline-none transition-colors',
           'placeholder:text-stone-400',
           'focus:border-stone-900 focus:ring-2 focus:ring-stone-900/10',
           errors.content
@@ -49,6 +51,16 @@
       ></textarea>
       <p v-if="errors.content" class="mt-1.5 text-xs text-red-500">
         {{ errors.content }}
+      </p>
+      <p
+        class="mt-1.5 text-right text-xs"
+        :class="contentCharacters >= NOTE_CONTENT_MAX_LENGTH ? 'text-red-500' : 'text-stone-500'"
+      >
+        {{
+          contentCharacters >= NOTE_CONTENT_MAX_LENGTH
+            ? t('noteForm.errors.contentLimitReached', { count: NOTE_CONTENT_MAX_LENGTH })
+            : t('noteForm.contentCounter', { count: contentCharacters, max: NOTE_CONTENT_MAX_LENGTH })
+        }}
       </p>
     </div>
 
@@ -68,14 +80,17 @@
 </template>
 
 <script setup>
+  import { computed } from "vue";
   import { useI18n } from "vue-i18n";
   import { useNoteForm } from "../composables/useNoteForm";
+  import { NOTE_CONTENT_MAX_LENGTH, NOTE_TITLE_MAX_LENGTH } from "../constants/noteValidation";
 
   defineOptions({ name: "NoteForm" });
 
   const emit = defineEmits(["note-created"]);
   const { t } = useI18n();
   const { form, errors, isSubmitting, submit } = useNoteForm();
+  const contentCharacters = computed(() => form.content.length);
 
   async function handleSubmit() {
     const success = await submit();

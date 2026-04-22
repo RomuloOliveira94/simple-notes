@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { flushPromises, mount } from '@vue/test-utils'
 import NoteForm from '../../app/javascript/modules/notes/components/NoteForm.vue'
 import { mountWithI18n } from './support/i18n'
+import { NOTE_CONTENT_MAX_LENGTH, NOTE_TITLE_MAX_LENGTH } from '../../app/javascript/modules/notes/constants/noteValidation'
 
 global.fetch = vi.fn()
 
@@ -43,10 +44,48 @@ describe('NoteForm', () => {
       global: mountWithI18n()
     })
 
+    await wrapper.find('input').setValue('Valid title')
     await wrapper.find('form').trigger('submit.prevent')
     await flushPromises()
 
     expect(wrapper.text()).toContain('Title can\'t be blank')
+  })
+
+  it('validates required title on frontend before submitting', async () => {
+    const wrapper = mount(NoteForm, {
+      global: mountWithI18n()
+    })
+
+    await wrapper.find('textarea').setValue('Test content')
+    await wrapper.find('form').trigger('submit.prevent')
+    await flushPromises()
+
+    expect(global.fetch).not.toHaveBeenCalled()
+    expect(wrapper.text()).toContain('Título não pode ficar em branco')
+  })
+
+  it('renders max length attributes and content counter', async () => {
+    const wrapper = mount(NoteForm, {
+      global: mountWithI18n()
+    })
+
+    expect(wrapper.find('#title').attributes('maxlength')).toBe(String(NOTE_TITLE_MAX_LENGTH))
+    expect(wrapper.find('#content').attributes('maxlength')).toBe(String(NOTE_CONTENT_MAX_LENGTH))
+    expect(wrapper.find('#content').attributes('rows')).toBe('8')
+    expect(wrapper.find('#content').classes()).toContain('resize-y')
+    expect(wrapper.text()).toContain(`0/${NOTE_CONTENT_MAX_LENGTH} caracteres`)
+
+    await wrapper.find('textarea').setValue('abc')
+    expect(wrapper.text()).toContain(`3/${NOTE_CONTENT_MAX_LENGTH} caracteres`)
+  })
+
+  it('shows message when content character limit is reached', async () => {
+    const wrapper = mount(NoteForm, {
+      global: mountWithI18n()
+    })
+
+    await wrapper.find('textarea').setValue('a'.repeat(NOTE_CONTENT_MAX_LENGTH))
+    expect(wrapper.text()).toContain(`Limite de ${NOTE_CONTENT_MAX_LENGTH} caracteres atingido`)
   })
 
   it('disables submit button while request is in progress', async () => {

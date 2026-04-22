@@ -37,6 +37,18 @@ describe('NoteList', () => {
     expect(wrapper.find('p').exists()).toBe(false)
   })
 
+  it('preserves whitespace formatting in note content rendering', () => {
+    const notes = [{ id: 1, title: 'Formatado', content: 'Linha 1\n  Linha 2   com   espaços' }]
+    const wrapper = mount(NoteList, {
+      props: { notes },
+      global: mountWithI18n()
+    })
+
+    const contentParagraph = wrapper.find('li p')
+    expect(contentParagraph.classes()).toContain('whitespace-pre-wrap')
+    expect(contentParagraph.text()).toContain('Linha 2   com   espaços')
+  })
+
   it('emits delete-note when delete button is clicked', async () => {
     const notes = [{ id: 1, title: 'Note 1', content: 'Content 1' }]
     const wrapper = mount(NoteList, {
