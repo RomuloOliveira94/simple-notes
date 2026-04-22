@@ -77,6 +77,26 @@ RSpec.describe "Notes", type: :request do
       json = JSON.parse(response.body)
       expect(json["errors"]).to include("Título #{I18n.t('errors.messages.blank')}")
     end
+
+    it "returns errors when title exceeds max length" do
+      expect {
+        post notes_path, params: { note: { title: "a" * (Note::TITLE_MAX_LENGTH + 1), content: "Content" } }
+      }.not_to change(Note, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Título #{I18n.t('errors.messages.too_long', count: Note::TITLE_MAX_LENGTH)}")
+    end
+
+    it "returns errors when content exceeds max length" do
+      expect {
+        post notes_path, params: { note: { title: "Long content", content: "a" * (Note::CONTENT_MAX_LENGTH + 1) } }
+      }.not_to change(Note, :count)
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Conteúdo #{I18n.t('errors.messages.too_long', count: Note::CONTENT_MAX_LENGTH)}")
+    end
   end
 
   describe "DELETE /notes/:id" do
