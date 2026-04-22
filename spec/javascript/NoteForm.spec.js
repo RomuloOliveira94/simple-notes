@@ -71,6 +71,8 @@ describe('NoteForm', () => {
 
     expect(wrapper.find('#title').attributes('maxlength')).toBe(String(NOTE_TITLE_MAX_LENGTH))
     expect(wrapper.find('#content').attributes('maxlength')).toBe(String(NOTE_CONTENT_MAX_LENGTH))
+    expect(wrapper.find('#content').attributes('rows')).toBe('8')
+    expect(wrapper.find('#content').classes()).toContain('resize-y')
     expect(wrapper.text()).toContain(`0/${NOTE_CONTENT_MAX_LENGTH} caracteres`)
 
     await wrapper.find('textarea').setValue('abc')

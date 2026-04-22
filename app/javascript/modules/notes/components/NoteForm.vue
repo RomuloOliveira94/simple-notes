@@ -37,11 +37,11 @@
       <textarea
         id="content"
         v-model="form.content"
-        rows="3"
+        rows="8"
         :maxlength="NOTE_CONTENT_MAX_LENGTH"
         :placeholder="t('noteForm.contentPlaceholder')"
         :class="[
-          'w-full resize-none rounded-lg border bg-white px-3.5 py-2.5 text-sm outline-none transition-colors',
+          'w-full min-h-40 resize-y rounded-lg border bg-white px-3.5 py-2.5 text-sm outline-none transition-colors',
           'placeholder:text-stone-400',
           'focus:border-stone-900 focus:ring-2 focus:ring-stone-900/10',
           errors.content
