@@ -8,8 +8,15 @@ export default {
     titlePlaceholder: 'Dê um nome à anotação',
     contentLabel: 'Conteúdo',
     contentPlaceholder: 'Escreva algo...',
+    contentCounter: '{count}/{max} caracteres',
     submit: 'Salvar',
-    submitting: 'Salvando...'
+    submitting: 'Salvando...',
+    errors: {
+      titleRequired: 'Título não pode ficar em branco',
+      titleTooLong: 'Título deve ter no máximo {count} caracteres',
+      contentTooLong: 'Conteúdo deve ter no máximo {count} caracteres',
+      contentLimitReached: 'Limite de {count} caracteres atingido'
+    }
   },
   noteList: {
     countOne: '{count} anotação',

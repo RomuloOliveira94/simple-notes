@@ -1,6 +1,7 @@
 import { reactive, ref } from 'vue'
 import { translate } from '@app/plugins/i18n'
 import { createNoteRequest } from '../api/notesApi'
+import { NOTE_CONTENT_MAX_LENGTH, NOTE_TITLE_MAX_LENGTH } from '../constants/noteValidation'
 
 export function useNoteForm() {
   const form = reactive({
@@ -31,12 +32,36 @@ export function useNoteForm() {
     })
   }
 
+  function validateForm() {
+    let isValid = true
+
+    if (form.title.trim().length === 0) {
+      errors.title = translate('noteForm.errors.titleRequired')
+      isValid = false
+    } else if (form.title.length > NOTE_TITLE_MAX_LENGTH) {
+      errors.title = translate('noteForm.errors.titleTooLong', { count: NOTE_TITLE_MAX_LENGTH })
+      isValid = false
+    }
+
+    if (form.content.length > NOTE_CONTENT_MAX_LENGTH) {
+      errors.content = translate('noteForm.errors.contentTooLong', { count: NOTE_CONTENT_MAX_LENGTH })
+      isValid = false
+    }
+
+    return isValid
+  }
+
   async function submit() {
     if (isSubmitting.value) {
       return false
     }
 
     resetErrors()
+
+    if (!validateForm()) {
+      return false
+    }
+
     isSubmitting.value = true
 
     try {
