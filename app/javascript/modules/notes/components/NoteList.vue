@@ -38,7 +38,7 @@
         <h3 class="text-sm font-semibold text-stone-900">{{ note.title }}</h3>
         <p
           v-if="note.content"
-          class="mt-1 text-sm leading-relaxed text-stone-500"
+          class="mt-1 whitespace-pre-wrap break-words text-sm leading-relaxed text-stone-500"
         >
           {{ note.content }}
         </p>

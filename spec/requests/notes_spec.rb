@@ -68,6 +68,17 @@ RSpec.describe "Notes", type: :request do
       expect(response).to have_http_status(:created)
     end
 
+    it "preserves whitespace in content when creating a note" do
+      content_with_spaces = "Primeira linha\n  Segunda   linha com   espaços  "
+
+      post notes_path, params: { note: { title: "Com espaços", content: content_with_spaces } }
+
+      expect(response).to have_http_status(:created)
+      json = JSON.parse(response.body)
+      expect(json["content"]).to eq(content_with_spaces)
+      expect(Note.last.content).to eq(content_with_spaces)
+    end
+
     it "returns errors when title is missing" do
       expect {
         post notes_path, params: { note: { content: "No title" } }
