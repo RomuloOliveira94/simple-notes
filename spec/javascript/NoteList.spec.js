@@ -37,6 +37,18 @@ describe('NoteList', () => {
     expect(wrapper.find('p').exists()).toBe(false)
   })
 
+  it('applies long-title wrapping classes to keep the title inside the card', () => {
+    const notes = [{ id: 1, title: 'a'.repeat(200), content: null }]
+    const wrapper = mount(NoteList, {
+      props: { notes },
+      global: mountWithI18n()
+    })
+
+    const title = wrapper.find('li h3')
+    expect(title.classes()).toContain('break-all')
+    expect(title.classes()).toContain('pr-8')
+  })
+
   it('preserves whitespace formatting in note content rendering', () => {
     const notes = [{ id: 1, title: 'Formatado', content: 'Linha 1\n  Linha 2   com   espaços' }]
     const wrapper = mount(NoteList, {
